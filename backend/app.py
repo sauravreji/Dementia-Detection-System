@@ -4,15 +4,12 @@ from flask_pymongo import PyMongo
 from cryptography.fernet import Fernet
 import certifi
 from predictions import predict_alzheimers
+from io import BytesIO
 
 app = Flask(__name__)
-<<<<<<< Updated upstream
-CORS(app)
-=======
 
-# Configure CORS globally for all routes
+
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
->>>>>>> Stashed changes
 
 app.config["MONGO_URI"] = "mongodb+srv://sauravkreji:GYRAH53ZLpSR9YB4@cluster0.81y7c.mongodb.net/Dimentia-detection-system?retryWrites=true&w=majority"
 mongo = PyMongo(app, tlsCAFile=certifi.where())
@@ -46,13 +43,6 @@ def predict():
         return jsonify({"error": "Please provide patientId"}), 400
     
     try:
-<<<<<<< Updated upstream
-        result = predict_alzheimers(img_file)
-
-        return jsonify({"patientId": patient_id,"prediction":result}), 200
-    except Exception as e:
-        print(f"Prediction Error: {e}")
-=======
         print("Reading image bytes")
         img_bytes = BytesIO(img_file.read())
         print(f"Image bytes read: {len(img_bytes.getvalue())} bytes")
@@ -63,7 +53,6 @@ def predict():
     except Exception as e:
         print(f"Error in predict: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
->>>>>>> Stashed changes
 
 if __name__ == "__main__":
     print("Starting Flask server")

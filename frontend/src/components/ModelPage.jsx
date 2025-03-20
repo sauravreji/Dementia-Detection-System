@@ -5,6 +5,8 @@ import { FiUpload } from "react-icons/fi";
 import ResultPage from "./ResultPage";
 import Navbar from "./Navbar";
 import { motion } from "framer-motion";
+import axios from "axios";
+import Loading from "./Loading";
 
 const ModelPage = () => {
   const [file, setFile] = useState(null);
@@ -12,6 +14,7 @@ const ModelPage = () => {
   const [patientId, setPatientId] = useState("");
   const [result, setResult] = useState(null);
   const fileInput = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -25,25 +28,6 @@ const ModelPage = () => {
       const formData = new FormData();
       formData.append("image", file);
       formData.append("patientId", patientId);
-<<<<<<< Updated upstream
-
-      try {
-        const response = await fetch("http://localhost:5000/predict", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          setResult(data); // Store the prediction result
-          setSubmitted(true); // Mark as submitted
-        } else {
-          alert(data.error || "Something went wrong"); // Use error message from server
-        }
-      } catch (err) {
-        console.error("Error submitting form:", err);
-        alert("An error occurred while submitting the form.");
-=======
       setLoading(true);
 
       try {
@@ -60,7 +44,6 @@ const ModelPage = () => {
         console.error("Error submitting form:", err);
         const errorMessage = err.response?.data?.error || "An error occurred while submitting the form.";
         alert(errorMessage);
->>>>>>> Stashed changes
       }
     } else {
       alert("Please fill all the fields");
@@ -133,6 +116,7 @@ const ModelPage = () => {
       {submitted && (
         <ResultPage ImgURL={URL.createObjectURL(file)} result={result} />
       )}
+      {loading && <Loading />}
     </>
   );
 };

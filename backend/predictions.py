@@ -5,16 +5,10 @@ from tensorflow.keras.preprocessing import image
 from io import BytesIO
 from PIL import Image
 
-<<<<<<< Updated upstream
-# Load the model once when the module is imported
-model = tf.keras.models.load_model("alzheimers_classification_model.h5",compile=False)
-class_labels = ["MildDemented", "ModerateDemented", "NonDemented", "VeryMildDemented"]
-=======
 print("Loading model")
 model = tf.keras.models.load_model("alzheimers_classification_model.h5", compile=False)
 print("Model loaded successfully")
 class_labels = ["Mild Demented", "Moderate Demented", "Non Demented", "Very Mild Demented"]
->>>>>>> Stashed changes
 
 def predict_alzheimers(img_bytes):
     print("Starting predict_alzheimers")
