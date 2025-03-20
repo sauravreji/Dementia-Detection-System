@@ -1,18 +1,38 @@
-# backend/model_predict.py
+# predictions.py
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.preprocessing import image
+from io import BytesIO
+from PIL import Image
 
+<<<<<<< Updated upstream
 # Load the model once when the module is imported
 model = tf.keras.models.load_model("alzheimers_classification_model.h5",compile=False)
 class_labels = ["MildDemented", "ModerateDemented", "NonDemented", "VeryMildDemented"]
+=======
+print("Loading model")
+model = tf.keras.models.load_model("alzheimers_classification_model.h5", compile=False)
+print("Model loaded successfully")
+class_labels = ["Mild Demented", "Moderate Demented", "Non Demented", "Very Mild Demented"]
+>>>>>>> Stashed changes
 
-def predict_alzheimers(img_path):
-    img = image.load_img(img_path, target_size=(150, 150))
-    img_array = image.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)
-    img_array /= 255.0
-    predictions = model.predict(img_array)
-    predicted_class = np.argmax(predictions)
-    confidence = np.max(predictions) * 100
-    return {"class": class_labels[predicted_class], "confidence": confidence}
+def predict_alzheimers(img_bytes):
+    print("Starting predict_alzheimers")
+    try:
+        # Convert BytesIO to PIL Image
+        img = Image.open(img_bytes)
+        # Resize to 150x150
+        img = img.resize((150, 150))
+        # Convert to array
+        img_array = image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array /= 255.0
+        # Predict
+        predictions = model.predict(img_array)
+        predicted_class = np.argmax(predictions)
+        confidence = float(np.max(predictions) * 100)  # Convert float32 to float
+        print(f"Prediction: {class_labels[predicted_class]}, Confidence: {confidence}")
+        return {"class": class_labels[predicted_class], "confidence": confidence}
+    except Exception as e:
+        print(f"Error in predict_alzheimers: {e}")
+        raise
